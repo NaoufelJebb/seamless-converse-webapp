@@ -22,17 +22,13 @@ class Config:
     DB_PORT = environ.get('DB_PORT', None)
     DB_NAME = environ.get('DB_NAME', None)
 
-    try:
-        SQLALCHEMY_DATABASE_URI =\
-            f"{DB_ENGINE}://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-
-    except Exception as e:
-        # Fallback to sqlite3
-        print("[ERROR] Exception raised: " + str(e))
-        SQLALCHEMY_DATABASE_URI =\
-            'sqlite3:///' + path.join(BASE_DIR, "db_local.db")
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(BASE_DIR, "db_local.db")
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # reCaptcha Credentials
+    RECAPTCHA_PUBLIC_KEY = environ.get('RECAPTCHA_PUBLIC_KEY', None)
+    RECAPTCHA_PRIVATE_KEY = environ.get('RECAPTCHA_PRIVATE_KEY', None)
 
 
 class DevConfig(Config):
@@ -51,6 +47,6 @@ class ProdConfig(Config):
 
 
 app_configurations = {
-    "dev": DevConfig,
-    "prod": ProdConfig
+    "dev": DevConfig(),
+    "prod": ProdConfig()
 }
